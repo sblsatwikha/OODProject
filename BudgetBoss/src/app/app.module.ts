@@ -6,11 +6,10 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule ,ReactiveFormsModule} from '@angular/forms';
-import { FormGroup } from '@angular/forms';
-import { Validators } from '@angular/forms';
+import { NgChartsModule } from 'ng2-charts';
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, IonicModule.forRoot(),IonicModule, AppRoutingModule,FormsModule,ReactiveFormsModule],
+  imports: [BrowserModule, IonicModule.forRoot(),IonicModule, AppRoutingModule,FormsModule,ReactiveFormsModule,NgChartsModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })

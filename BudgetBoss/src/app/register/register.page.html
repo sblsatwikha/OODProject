@@ -13,12 +13,12 @@
   <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
     <ion-list>
       <ion-item>
-        <ion-label position="floating">Username</ion-label>
-        <ion-input formControlName="username"></ion-input>
+        <ion-label position="floating">Phone</ion-label>
+        <ion-input  placeholder="888-888-8888" type="tel" formControlName="phone"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label position="floating">Email</ion-label>
-        <ion-input formControlName="email"></ion-input>
+        <ion-input placeholder="email@domain.com" type="email" formControlName="email"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label position="floating">Password</ion-label>
