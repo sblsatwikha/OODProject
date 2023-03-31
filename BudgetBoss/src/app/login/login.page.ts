@@ -14,9 +14,11 @@ export class LoginPage implements OnInit {
   }
 
   loginClicked(){
-    alert("Hey")
     this.router.navigateByUrl('tabs', { replaceUrl: true });
     // this.router.navigateByUrl('')
+  }
+  registerClicked(){
+    this.router.navigateByUrl('register', { replaceUrl: true });
   }
 
 }
