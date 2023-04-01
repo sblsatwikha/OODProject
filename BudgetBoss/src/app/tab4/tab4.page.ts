@@ -11,5 +11,7 @@ export class Tab4Page implements OnInit {
 
   ngOnInit() {
   }
-
+logout(){
+  alert("logout")
+}
 }
