@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Chart } from 'chart.js';
-
+// import { Chart } from 'chart.js';
+import Chart from 'chart.js/auto';
+import { ChartConfiguration } from 'chart.js';
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -8,12 +9,13 @@ import { Chart } from 'chart.js';
 })
 
 export class Tab1Page implements OnInit {
-
+  doughnutChart!: Chart;
   constructor() { }
 
   ngOnInit() {
     this.createPieChart();
     this.createLineChart();
+    this.createDoughnutchart();
   }
 
   createPieChart() {
@@ -30,7 +32,7 @@ export class Tab1Page implements OnInit {
     const options = {
       responsive: true,
       legend: {
-        position: 'left',
+        position: 'bottom',
       }
     };
 
@@ -39,6 +41,7 @@ export class Tab1Page implements OnInit {
       data: data,
       options: options
     });
+    
   }
 
   createLineChart() {
@@ -46,23 +49,17 @@ export class Tab1Page implements OnInit {
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
       datasets: [
         {
-          label: 'My First dataset',
+          label: 'My Spending',
           data: [65, 59, 80, 81, 56, 55, 40],
           fill: false,
           borderColor: '#4bc0c0'
-        },
-        {
-          label: 'My Second dataset',
-          data: [28, 48, 40, 19, 86, 27, 90],
-          fill: false,
-          borderColor: '#565656'
         }]
     };
 
     const options = {
       responsive: true,
       legend: {
-        position: 'top',
+        position: 'bottom',
       },
       scales: {
         xAxes: [{
@@ -86,6 +83,38 @@ export class Tab1Page implements OnInit {
       type: 'line',
       data: data
     });
+  }
+  createDoughnutchart(){
+    const config: ChartConfiguration<'doughnut'> = {
+      type: 'doughnut',
+      data: {
+        labels: ['Red', 'Blue', 'Yellow'],
+        datasets: [{
+          label: 'My First Dataset',
+          data: [300, 50, 100],
+          backgroundColor: [
+            'rgb(255, 99, 132)',
+            'rgb(54, 162, 235)',
+            'rgb(255, 205, 86)'
+          ],
+          hoverOffset: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'right'
+          },
+          title: {
+            display: false,
+            text: 'Chart.js Doughnut Chart'
+          }
+        }
+      }
+    };
+
+    this.doughnutChart = new Chart('myChart', config);
   }
 
 }

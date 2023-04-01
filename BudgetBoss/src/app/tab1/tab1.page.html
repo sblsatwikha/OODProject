@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Dashboard
+      Welcome Sumanth!
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -9,28 +9,30 @@
 <ion-content >
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Dashboard</ion-title>
+      <ion-title size="large">Welcome Sumanth!</ion-title>
     </ion-toolbar>
   </ion-header>
  
-  <ion-card color="dark">
+  <!-- <ion-card>
     <ion-card-header>
       <ion-card-title>Welcome Sumanth!</ion-card-title>
     </ion-card-header>
-  </ion-card>
+  </ion-card> -->
   <ion-item>
     <ion-label>Report for </ion-label>
     <ion-datetime-button datetime="datetime" displayFormat="MMM DD, YYYY" ></ion-datetime-button>
   </ion-item>
-  <ion-card color="dark">
-  <div  class="chart-container dashBoardPiechart piechart-wrapper" >
-    <canvas id="pie-chart"></canvas>
+  <ion-card >
+  <div  class="piechart-wrapper" >
+    
+    <canvas id="myChart"></canvas>
   </div>
 </ion-card>
   <div class="graph-container">
     <canvas id="line-chart"></canvas>
   </div>
- 
+  <!-- <canvas id="pie-chart"></canvas> -->
+
 <ion-modal [keepContentsMounted]="true">
   <ng-template>
     <ion-datetime id="datetime"></ion-datetime>
