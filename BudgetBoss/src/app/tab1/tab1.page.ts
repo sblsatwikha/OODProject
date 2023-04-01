@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 // import { Chart } from 'chart.js';
 import Chart from 'chart.js/auto';
 import { ChartConfiguration } from 'chart.js';
+import { NgProgress } from 'ngx-progressbar';
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -10,13 +11,17 @@ import { ChartConfiguration } from 'chart.js';
 
 export class Tab1Page implements OnInit {
   doughnutChart!: Chart;
-  constructor() { }
+  spend = 700;
+ budget=1000;
+  date=new Date();
+  constructor(private progress: NgProgress) { }
 
   ngOnInit() {
     this.createPieChart();
     this.createLineChart();
     this.createDoughnutchart();
   }
+  // a function that updates the progress bar value over time
 
   createPieChart() {
     const data = {
@@ -49,7 +54,7 @@ export class Tab1Page implements OnInit {
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
       datasets: [
         {
-          label: 'My Spending',
+          label: 'My Monthly Spending',
           data: [65, 59, 80, 81, 56, 55, 40],
           fill: false,
           borderColor: '#4bc0c0'

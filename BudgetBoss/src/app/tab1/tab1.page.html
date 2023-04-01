@@ -18,19 +18,43 @@
       <ion-card-title>Welcome Sumanth!</ion-card-title>
     </ion-card-header>
   </ion-card> -->
+  <!-- <ion-progress-bar [value]="progressValue"></ion-progress-bar> -->
+  
   <ion-item>
-    <ion-label>Report for </ion-label>
-    <ion-datetime-button datetime="datetime" displayFormat="MMM DD, YYYY" ></ion-datetime-button>
+    <!-- <ion-label>Report for </ion-label> -->
+    <ion-input
+          value="{{ date | date: 'MMM yyyy' }}"
+          id="dashboarddate"
+          class="ion-text-end"
+        ></ion-input>
+        <ion-popover trigger="dashboarddate" size="cover">
+          <ng-template>
+            <ion-datetime
+              presentation="date"
+            ></ion-datetime>
+          </ng-template>
+        </ion-popover>
   </ion-item>
+  <ion-item>
+    <ion-label>Spent/Budget</ion-label>
+    <ion-label>{{ spend | currency:'USD':'symbol' }} / {{ budget | currency:'USD':'symbol' }}</ion-label>
+  </ion-item>
+  
+  <ion-progress-bar class="progressbar" color="success" mode="determinate"  value="{{ spend / budget }}">
+    <div class="progress-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1;">
+      {{ spend | currency:'USD':'symbol' }} / {{ budget | currency:'USD':'symbol' }}
+    </div>
+  </ion-progress-bar>
   <ion-card >
-  <div  class="piechart-wrapper" >
-    
+  <div  class="chart-wrapper" >
     <canvas id="myChart"></canvas>
   </div>
 </ion-card>
+<ion-card>
   <div class="graph-container">
     <canvas id="line-chart"></canvas>
   </div>
+</ion-card>
   <!-- <canvas id="pie-chart"></canvas> -->
 
 <ion-modal [keepContentsMounted]="true">
