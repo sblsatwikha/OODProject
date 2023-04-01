@@ -20,25 +20,15 @@
       </ion-button>
       
      </ion-card-content>
-     <ion-item detail="true">
-      <ion-label>
-        <h3>Groceries</h3>
-        <p>Detail set to true - detail arrow displays on both modes</p>
-      </ion-label>
-    </ion-item>
-    
-  <ion-list>
-    <ion-item>
-      <ion-label>Groceries</ion-label>   
-    </ion-item>
-    <ion-item>
-      <ion-label>Restaurant Bill</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>Beverages</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>Movie Tickets</ion-label>
-    </ion-item> 
-  </ion-list>
+     <ion-list>
+      <ion-item detail="true" *ngFor="let item of items">
+        <ion-label>
+          <div class="expense-item-container">
+          <h2>{{ item.name }}</h2>
+          <h2> $ {{ item.price }}</h2>
+          </div>
+          <p>Description: {{ item.description }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
 </ion-content>

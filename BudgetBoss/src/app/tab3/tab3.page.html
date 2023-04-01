@@ -24,21 +24,17 @@
       </ion-button>
       
      </ion-card-content>
-  
-  <ion-list>
-    <ion-item>
-      <ion-label>Apple iCloud</ion-label>   
-    </ion-item>
-    <ion-item>
-      <ion-label>Google One</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>Spotify Premium</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>Youtube Premium</ion-label>
-    </ion-item> 
-  </ion-list>
+     <ion-list>
+      <ion-item detail="true" *ngFor="let item of items">
+        <ion-label>
+          <div class="subscrip-item-container">
+          <h2>{{ item.name }}</h2>
+          <h2> $ {{ item.price }}</h2>
+          </div>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
   
   
  
@@ -70,7 +66,7 @@
            
             <ion-row class="ion-justify-content-center">
               <ion-icon name="logo-usd"></ion-icon>
-              <ion-input label="Outline input" label-placement="floating" type="number"  fill="outline" placeholder="0.00" ></ion-input>
+              <ion-input label="Outline input" label-placement="floating" type="number"  fill="outline" placeholder="0.00" [(ngModel)]="price"></ion-input>
             
             </ion-row>
             
@@ -83,7 +79,7 @@
         <ion-item>
           <ion-label >Billing Date</ion-label>
           <ion-input
-          value="{{ date | date: 'dd/MM/yyyy' }}"
+          value="{{ billdate | date: 'dd/MM/yyyy' }}"
           id="date"
           class="ion-text-end"
         ></ion-input>
@@ -91,7 +87,7 @@
           <ng-template>
             <ion-datetime
               presentation="date"
-              [(ngModel)]="date"
+              [(ngModel)]="billdate"
             ></ion-datetime>
           </ng-template>
         </ion-popover>

@@ -30,7 +30,7 @@ export class Tab1Page implements OnInit {
     const options = {
       responsive: true,
       legend: {
-        position: 'right',
+        position: 'left',
       }
     };
 

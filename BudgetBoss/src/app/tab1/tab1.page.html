@@ -15,24 +15,22 @@
  
   <ion-card color="dark">
     <ion-card-header>
-      <ion-card-title>Welcome Sumanth...!!</ion-card-title>
-      <ion-card-subtitle>This month budget</ion-card-subtitle>
+      <ion-card-title>Welcome Sumanth!</ion-card-title>
     </ion-card-header>
   </ion-card>
   <ion-item>
     <ion-label>Report for </ion-label>
     <ion-datetime-button datetime="datetime" displayFormat="MMM DD, YYYY" ></ion-datetime-button>
   </ion-item>
-  
-  <div  class="chart-container dashBoardPiechart">
+  <ion-card color="dark">
+  <div  class="chart-container dashBoardPiechart piechart-wrapper" >
     <canvas id="pie-chart"></canvas>
   </div>
-
+</ion-card>
   <div class="graph-container">
     <canvas id="line-chart"></canvas>
   </div>
-  
-
+ 
 <ion-modal [keepContentsMounted]="true">
   <ng-template>
     <ion-datetime id="datetime"></ion-datetime>

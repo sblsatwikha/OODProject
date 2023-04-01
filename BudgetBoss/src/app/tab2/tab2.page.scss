@@ -5,3 +5,8 @@
     align-items:center;
     padding:0rem;
 }
+.expense-item-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
