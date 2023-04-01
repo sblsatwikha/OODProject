@@ -88,7 +88,7 @@ export class Tab1Page implements OnInit {
     const config: ChartConfiguration<'doughnut'> = {
       type: 'doughnut',
       data: {
-        labels: ['Red', 'Blue', 'Yellow'],
+        labels: ['Clothing', 'Food', 'Entertainment'],
         datasets: [{
           label: 'My First Dataset',
           data: [300, 50, 100],
@@ -107,8 +107,8 @@ export class Tab1Page implements OnInit {
             position: 'right'
           },
           title: {
-            display: false,
-            text: 'Chart.js Doughnut Chart'
+            display: true,
+            text: 'Category Spent '
           }
         }
       }
