@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import Chart from 'chart.js/auto';
 import { ChartConfiguration } from 'chart.js';
 import { NgProgress } from 'ngx-progressbar';
+
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -121,5 +122,6 @@ export class Tab1Page implements OnInit {
 
     this.doughnutChart = new Chart('myChart', config);
   }
-
+   
+  
 }
