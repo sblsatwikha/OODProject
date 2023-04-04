@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
     providedIn: 'root'
   })
 export class loginService {
-    uri:string = 'https://vpic.nhtsa.dot.gov/api';
+    uri:string = 'http://localhost:8081/api/auth';
 
   constructor(private http: HttpClient) { }
 
@@ -12,7 +12,10 @@ export class loginService {
     console.log('login service triggered');
     return this.http.get(`${this.uri}/vehicles/getallmakes?format=json`);
   }
-  testPostMethod(data:any){
-    return this.http.post(`${this.uri}/New`, data);
+  registerUser(data:any){
+    return this.http.post(`${this.uri}/signup`, data);
+  }
+  signInUser(data:any){
+    return this.http.post(`${this.uri}/signin`, data);
   }
   }

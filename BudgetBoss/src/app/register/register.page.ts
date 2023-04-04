@@ -1,6 +1,9 @@
 import { Component,OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { loginService } from '../services/loginService.service';
+import { ToastController } from '@ionic/angular';
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.page.html',
@@ -9,11 +12,12 @@ import { Router } from '@angular/router';
 export class RegisterPage implements OnInit {
   registerForm: FormGroup;
   
-  constructor(private formBuilder: FormBuilder,private router: Router) {
+  constructor(private formBuilder: FormBuilder,private router: Router,private loginService: loginService,private toastController: ToastController) {
     this.registerForm = this.formBuilder.group({
       phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
+      fullName:'',
       confirmPassword: ['', Validators.required],
     });
     
@@ -22,7 +26,34 @@ export class RegisterPage implements OnInit {
   }
   onSubmit() {
     console.log(this.registerForm.value);
-    this.router.navigateByUrl('', { replaceUrl: true });
+    
+    let payload={
+      phoneNumber: this.registerForm.value.phone,
+      emailId: this.registerForm.value.email,
+      fullName:this.registerForm.value.fullName,
+      password:this.registerForm.value.password,
+    }
+    this.loginService.registerUser(payload).subscribe(
+      (data: any) => {
+        console.log(data);
+        this.registerForm.reset();
+        // Success function
+        this.presentToast(data.message);
+        this.router.navigateByUrl('', { replaceUrl: true });
+      },
+      (error: any) => {
+        console.error(error);
+        this.presentToast(error.error.message);
+        // Error function
+      }
+    );
+  }
+  async presentToast(message: string | '') {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 5000
+    });
+    toast.present();
   }
 }
 
