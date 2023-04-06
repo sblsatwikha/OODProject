@@ -1,7 +1,7 @@
 import { Component,OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { loginService } from '../services/loginService.service';
+import { AuthService } from '../services/AuthService.service';
 import { ToastController } from '@ionic/angular';
 
 @Component({
@@ -12,7 +12,7 @@ import { ToastController } from '@ionic/angular';
 export class RegisterPage implements OnInit {
   registerForm: FormGroup;
   
-  constructor(private formBuilder: FormBuilder,private router: Router,private loginService: loginService,private toastController: ToastController) {
+  constructor(private formBuilder: FormBuilder,private router: Router,private AuthService: AuthService,private toastController: ToastController) {
     this.registerForm = this.formBuilder.group({
       phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
       email: ['', [Validators.required, Validators.email]],
@@ -33,7 +33,7 @@ export class RegisterPage implements OnInit {
       fullName:this.registerForm.value.fullName,
       password:this.registerForm.value.password,
     }
-    this.loginService.registerUser(payload).subscribe(
+    this.AuthService.registerUser(payload).subscribe(
       (data: any) => {
         console.log(data);
         this.registerForm.reset();

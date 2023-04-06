@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
-import { loginService } from '../services/loginService.service';
+import { AuthService } from '../services/AuthService.service';
 import { RegisterPageRoutingModule } from './register-routing.module';
 
 import { RegisterPage } from './register.page';
@@ -21,6 +21,6 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule
   ],
   declarations: [RegisterPage],
-  providers: [loginService]
+  providers: [AuthService]
 })
 export class RegisterPageModule {}
