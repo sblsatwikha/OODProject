@@ -17,7 +17,14 @@
   </ion-header>
 
   <ion-card-content  class="subscripHBox">
-
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content
+        pullingIcon="arrow-down"
+        pullingText="Pull to refresh"
+        refreshingSpinner="circles"
+        refreshingText="Refreshing...">
+      </ion-refresher-content>
+    </ion-refresher>
     <ion-searchbar placeholder="Search"></ion-searchbar>
       <ion-button id="open-modal"  expand="block" class="subcripBtn" size="large" fill="clear">
         <ion-icon name="add"></ion-icon>
@@ -25,11 +32,11 @@
       
      </ion-card-content>
      <ion-list>
-      <ion-item detail="true" *ngFor="let item of items">
+      <ion-item detail="true" *ngFor="let subscription of subscriptionsData">
         <ion-label>
           <div class="subscrip-item-container">
-          <h2>{{ item.name }}</h2>
-          <h2> $ {{ item.price }}</h2>
+          <h2>{{ subscription.name }}</h2>
+          <h2> $ {{ subscription.price }}</h2>
           </div>
         </ion-label>
       </ion-item>

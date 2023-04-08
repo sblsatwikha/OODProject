@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { PopoverController } from '@ionic/angular';
+import { subscriptionService } from '../services/subscriptionService.service';
 @Component({
   selector: 'app-tab3',
   templateUrl: 'tab3.page.html',
@@ -10,16 +11,21 @@ import { PopoverController } from '@ionic/angular';
 export class Tab3Page {
   @ViewChild(IonModal) modal: any;
 
-  constructor(public popoverController: PopoverController) {
+  constructor(public popoverController: PopoverController,private subscriptionService: subscriptionService) {
     
   }
-  items = [
-    { name: 'Apple iCloud', price: 10},
-    { name: 'Google One', price: 20 },
-    { name: 'Spotify Premium', price: 30},
-    { name: 'Youtube Premium', price: 30}
-  ];
 
+
+  // items = [
+  //   { name: 'Apple iCloud', price: 10},
+  //   { name: 'Google One', price: 20 },
+  //   { name: 'Spotify Premium', price: 30},
+  //   { name: 'Youtube Premium', price: 30}
+  // ];
+  // /subscription/getSubscriptions
+  subscriptionsData = [ {name:"",
+  price:""}
+];
   subname: string="";
   price:number=0;
   billdate:Date=new Date();
@@ -40,14 +46,42 @@ export class Tab3Page {
       "reminder":this.reminder,
       "note":this.note,
     }
-    this.items.push(newData)
+    // this.items.push(newData)
   }
-
+  ngOnInit() {
+    
+   this.getSubData();
+    
+  }
   onWillDismiss(event: Event) {
     const ev = event as CustomEvent<OverlayEventDetail<string>>;
     if (ev.detail.role === 'confirm') {
       
     }
+  }
+  getSubData(){
+    this.subscriptionService.getSubscriptionsData().subscribe(
+      (data: any) => {
+        console.log(data);
+        this.subscriptionsData=data;
+        // Success function
+        // this.presentToast(data.message);
+        // this.router.navigateByUrl('', { replaceUrl: true });
+      },
+      (error: any) => {
+        console.error(error);
+        // this.presentToast(error.error.message);
+        // Error function
+      }
+    );
+  }
+  doRefresh(event: any){
+    console.log(event);
+    this.getSubData();
+    setTimeout(() => {
+      console.log('Refresh operation complete');
+      event.target.complete();
+    }, 2000);
   }
 
 }
