@@ -3,6 +3,7 @@ import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { PopoverController } from '@ionic/angular';
 import { subscriptionService } from '../services/subscriptionService.service';
+import { CookieService } from 'ngx-cookie-service';
 @Component({
   selector: 'app-tab3',
   templateUrl: 'tab3.page.html',
@@ -11,7 +12,7 @@ import { subscriptionService } from '../services/subscriptionService.service';
 export class Tab3Page {
   @ViewChild(IonModal) modal: any;
 
-  constructor(public popoverController: PopoverController,private subscriptionService: subscriptionService) {
+  constructor(public popoverController: PopoverController,private subscriptionService: subscriptionService,private cookieService: CookieService) {
     
   }
 

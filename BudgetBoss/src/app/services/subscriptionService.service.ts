@@ -6,6 +6,7 @@ import {Storage} from '@ionic/storage';
 import { Platform } from '@ionic/angular';
 import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { access } from "fs";
+import { CookieService } from 'ngx-cookie-service';
 @Injectable({
     providedIn: 'root'
   })
@@ -19,7 +20,9 @@ export class subscriptionService {
   constructor(
     private readonly storage:Storage,
     private readonly platform:Platform,
-    private readonly http:HttpClient
+    private readonly http:HttpClient,
+    private cookieService: CookieService
+    
   ) {
     // this.loadUserInfo();
   }
@@ -52,14 +55,21 @@ export class subscriptionService {
 
 getSubscriptionsData() {
     console.log('Subscription service triggered');
-
+    this.setCookie();
     const httpOptions = {
         headers: new HttpHeaders({
           "Content-Type": "application/json",
-          "Cookie": "JWT-TOKEN=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdW1hbnRoMUBnbWFpbC5jb20iLCJpYXQiOjE2ODA5Nzg4ODksImV4cCI6MTY4MDk4MDY4OX0._Ao2GJx7Vbl_SsjQp56e0EkzVoyRNRHfdS2EG9qsEAs1mxi74fmxtV15aKRRa2opkHj-wTOioqJETkSk8CFVZg"
-        })
+          "Set-Cookie": "JWT-TOKEN=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdW1hbnRoMUBnbWFpbC5jb20iLCJpYXQiOjE2ODA5Nzg4ODksImV4cCI6MTY4MDk4MDY4OX0._Ao2GJx7Vbl_SsjQp56e0EkzVoyRNRHfdS2EG9qsEAs1mxi74fmxtV15aKRRa2opkHj-wTOioqJETkSk8CFVZg"
+        }),
+        // withCredentials: true
       };
+    //   document.cookie = {'JWT-TOKEN': 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdW1hbnRoMUBnbWFpbC5jb20iLCJpYXQiOjE2ODA5Nzg4ODksImV4cCI6MTY4MDk4MDY4OX0._Ao2GJx7Vbl_SsjQp56e0EkzVoyRNRHfdS2EG9qsEAs1mxi74fmxtV15aKRRa2opkHj-wTOioqJETkSk8CFVZg'}
     return this.http.get(`${this.uri}/getSubscriptions`,httpOptions);
+  }
+  setCookie() {
+    const expires = new Date();
+    expires.setMinutes(expires.getMinutes() + 30);
+    this.cookieService.set('JWT-TOKEN', 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdW1hbnRoMUBnbWFpbC5jb20iLCJpYXQiOjE2ODA5Nzg4ODksImV4cCI6MTY4MDk4MDY4OX0._Ao2GJx7Vbl_SsjQp56e0EkzVoyRNRHfdS2EG9qsEAs1mxi74fmxtV15aKRRa2opkHj-wTOioqJETkSk8CFVZg', expires, '/api', 'localhost', true, 'Lax');
   }
   
 

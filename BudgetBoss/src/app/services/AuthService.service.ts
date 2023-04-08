@@ -6,7 +6,7 @@ import { map, switchMap, flatMap } from "rxjs/operators";
 import { JwtHelperService } from "@auth0/angular-jwt";
 import {Storage} from '@ionic/storage';
 import { Platform } from '@ionic/angular';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
     providedIn: 'root'
@@ -75,6 +75,7 @@ export class AuthService {
 //     return this.http.post(`${this.uri}/signin`, data);
 //   }
   signInUser(payload: any): Observable<boolean> {
+  
     if(payload && payload.emailId && payload.password){
       return this.http.post(`${this.uri}/signin`,payload).pipe(
         map((response:any)=>{
