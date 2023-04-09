@@ -64,7 +64,20 @@ getSubscriptionsData() {
       };
     return this.http.get(`${this.uri}/getSubscriptions`,httpOptions);
   }
- 
 
+  postNewSubscription(newSubscription: any) {
+    console.log(newSubscription['subscriptionName']);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      }),
+      withCredentials: true
+    };
+
+    const url = `${this.uri}/newSubscription`;
+    return this.http.post<any>(url, newSubscription, httpOptions);
+
+  }
+ 
   
 }

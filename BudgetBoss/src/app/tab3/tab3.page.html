@@ -101,7 +101,7 @@
         </ion-item>
         <ion-item>
           <ion-label >Billing Cycle</ion-label>
-          <ion-select aria-label="billingcycle" placeholder="Select cycle">
+          <ion-select aria-label="billingcycle" placeholder="Select cycle" [(ngModel)]="billcycle">
             <ion-select-option value="daily">Daily</ion-select-option>
             <ion-select-option value="weekly">Weekly</ion-select-option>
             <ion-select-option value="monthly">Monthly</ion-select-option>
@@ -110,7 +110,7 @@
         </ion-item>
         <ion-item>
           <ion-label >Send Reminder</ion-label>
-          <ion-select aria-label="reminder" placeholder="Select reminder type">
+          <ion-select aria-label="reminder" placeholder="Select reminder type" [(ngModel)]="reminder">
             <ion-select-option value="never">Never</ion-select-option>
             <ion-select-option value="sameday">Same Day</ion-select-option>
             <ion-select-option value="oneday">One Day Prior</ion-select-option>

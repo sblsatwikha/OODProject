@@ -4,6 +4,8 @@ import { OverlayEventDetail } from '@ionic/core/components';
 import { PopoverController } from '@ionic/angular';
 import { subscriptionService } from '../services/subscriptionService.service';
 import { CookieService } from 'ngx-cookie-service';
+import { AuthService } from '../services/AuthService.service';
+
 @Component({
   selector: 'app-tab3',
   templateUrl: 'tab3.page.html',
@@ -11,9 +13,13 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class Tab3Page {
   @ViewChild(IonModal) modal: any;
+  userEmailId: any;
 
-  constructor(public popoverController: PopoverController,private subscriptionService: subscriptionService,private cookieService: CookieService) {
-    
+  constructor(public popoverController: PopoverController,
+    private subscriptionService: subscriptionService,
+    private cookieService: CookieService,
+    private AuthService: AuthService
+    ) {
   }
 
 
@@ -29,7 +35,7 @@ export class Tab3Page {
     subscriptionPrice:""}
 ];
   subname: string="";
-  price:number=0;
+  price:any=0;
   billdate:Date=new Date();
   billcycle:string="";
   reminder:string="";
@@ -41,20 +47,29 @@ export class Tab3Page {
   confirm() {
     this.modal.dismiss(this.subname, 'confirm');
     const newData={
-      "name":this.subname,
-      "price":this.price,
-      "billdate":this.billdate,
-      "billcycle":this.billcycle,
-      "reminder":this.reminder,
+      "emailId": this.userEmailId,
+      "subscriptionName":this.subname,
+      "subscriptionPrice":this.price,
+      "billingCycle":this.billcycle,
+      "billingDate":this.billdate,
+      "sendReminder":this.reminder,
       "note":this.note,
+      
     }
-    // this.items.push(newData)
+    this.subscriptionService.postNewSubscription(newData).subscribe((data: any) => {
+      console.log(data)
+      this.getSubData()
+    });
+    ;
   }
+  
   ngOnInit() {
-    
-   this.getSubData();
-    
+    this.AuthService.getLoggedInUserData().then(data => {
+      this.userEmailId = data.emailId
+    });
+    this.getSubData();  
   }
+
   onWillDismiss(event: Event) {
     const ev = event as CustomEvent<OverlayEventDetail<string>>;
     if (ev.detail.role === 'confirm') {

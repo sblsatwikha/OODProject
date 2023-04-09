@@ -10,10 +10,11 @@ import { NgChartsModule } from 'ng2-charts';
 import { AuthService } from './services/AuthService.service';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { CookieService } from 'ngx-cookie-service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, IonicModule.forRoot(),IonicModule, AppRoutingModule,FormsModule,ReactiveFormsModule,NgChartsModule,IonicStorageModule.forRoot()],
+  imports: [BrowserModule, IonicModule.forRoot(),IonicModule, AppRoutingModule,FormsModule,ReactiveFormsModule,NgChartsModule,IonicStorageModule.forRoot(), HttpClientModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy, },AuthService,CookieService],
   bootstrap: [AppComponent],
 })
