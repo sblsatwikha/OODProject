@@ -2,6 +2,8 @@ import { Component, ViewChild } from '@angular/core';
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { PopoverController } from '@ionic/angular';
+import { expenseService } from '../services/expenseService.service';
+import { categoryService } from '../services/categoryService.service';
 @Component({
   selector: 'app-tab2',
   templateUrl: 'tab2.page.html',
@@ -9,15 +11,22 @@ import { PopoverController } from '@ionic/angular';
 })
 export class Tab2Page {
   @ViewChild(IonModal) modal: any;
+  expenseData: any[] = [];
+  categoriesData: any[] = [];
 
-  constructor(public popoverController: PopoverController) {}
+  constructor(public popoverController: PopoverController,private expenseService: expenseService,private categoryService: categoryService) {}
     
+  ngOnInit() {
+    
+    this.getExpenses();
+    this.getCategories();
+   }
  
-  items = [
-    { name: 'Groceries', price: 10,category:'Food', description: 'Description of groceries' },
-    { name: 'Movie Tickets', price: 20,category:'Enterntainment', description: 'Description of movie tickets' },
-    { name: 'Cool Drinks', price: 30,category:'Food', description: 'Description of beverages' },
-  ];
+  // items = [
+  //   { name: 'Groceries', price: 10,category:'Food', description: 'Description of groceries' },
+  //   { name: 'Movie Tickets', price: 20,category:'Enterntainment', description: 'Description of movie tickets' },
+  //   { name: 'Cool Drinks', price: 30,category:'Food', description: 'Description of beverages' },
+  // ];
 
   
     
@@ -32,14 +41,27 @@ export class Tab2Page {
 
   confirm() {
     this.modal.dismiss(this.expname, 'confirm');
-    const newData={
+    let payload={
       "name":this.expname,
       "price":this.price,
       "expdate":this.expdate,
       "category":this.category,
       "description":this.description,
     }
-    this.items.push(newData)
+  
+    this.expenseService.saveExpense(payload).subscribe(
+      (data: any) => {
+        console.log(data);
+        // Success function
+    
+      },
+      (error: any) => {
+        console.error(error);
+      
+        // Error function
+      }
+    );
+    // this.items.push(newData)
   }
 
   onWillDismiss(event: Event) {
@@ -51,6 +73,55 @@ export class Tab2Page {
       this.category="";
       this.description="";
     }
+  }
+  getExpenses(){
+    this.expenseService.getAllExpensesData().subscribe(
+      (data: any) => {
+        console.log(data);
+        let newData = [];
+        if (!(data instanceof Array)) {
+          newData.push(data);
+          this.expenseData=newData;
+        }else {
+          this.expenseData=data;
+        }
+        
+        // Success function
+        // this.presentToast(data.message);
+        // this.router.navigateByUrl('', { replaceUrl: true });
+      },
+      (error: any) => {
+        console.error(error);
+        // this.presentToast(error.error.message);
+        // Error function
+      }
+    );
+  }
+  doRefresh(event: any){
+    console.log(event);
+    this.getExpenses();
+    setTimeout(() => {
+      console.log('Refresh operation complete');
+      event.target.complete();
+    }, 2000);
+  }
+  getCategories(){
+    this.categoryService.getAllCategoriesData().subscribe(
+      (data: any) => {
+        console.log(data);
+        let newData = [];
+        if (!(data instanceof Array)) {
+          newData.push(data);
+          this.categoriesData=newData;
+        }else {
+          this.categoriesData=data;
+        }
+       
+      },
+      (error: any) => {
+        console.error(error);
+      }
+    );
   }
 
 }

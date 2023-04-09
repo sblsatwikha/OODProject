@@ -13,7 +13,14 @@
     </ion-toolbar>
   </ion-header>
   <ion-card-content  class="expenseHBox">
-
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content
+        pullingIcon="arrow-down"
+        pullingText="Pull to refresh"
+        refreshingSpinner="circles"
+        refreshingText="Refreshing...">
+      </ion-refresher-content>
+    </ion-refresher>
     <ion-searchbar placeholder="Search"></ion-searchbar>
       <ion-button id="open-Expense-modal"  expand="block" class="subcripBtn" size="large" fill="clear">
         <ion-icon name="add"></ion-icon>
@@ -21,13 +28,13 @@
       
      </ion-card-content>
      <ion-list>
-      <ion-item detail="true" *ngFor="let item of items">
+      <ion-item detail="true" *ngFor="let expense of expenseData">
         <ion-label>
           <div class="expense-item-container">
-          <h2>{{ item.name }}</h2>
-          <h2> $ {{ item.price }}</h2>
+          <h2>{{ expense.expenseName }}</h2>
+          <h2> $ {{ expense.expensePrice }}</h2>
           </div>
-          <p>Description: {{ item.description }}</p>
+          <p>Description: {{ expense.description }}</p>
         </ion-label>
       </ion-item>
     </ion-list>
