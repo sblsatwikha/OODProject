@@ -13,7 +13,14 @@
       <ion-title size="large">Welcome Sumanth!</ion-title>
     </ion-toolbar>
   </ion-header>
- 
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-down"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
   <!-- <ion-card>
     <ion-card-header>
       <ion-card-title>Welcome Sumanth!</ion-card-title>
@@ -24,14 +31,16 @@
   <ion-item>
     <!-- <ion-label>Report for </ion-label> -->
     <ion-input
-          value="{{ date | date: 'MMM yyyy' }}"
-          id="dashboarddate"
+          value="{{ selectedDate | date: 'dd/MM/yyyy' }}"
+          id="date"
           class="ion-text-end"
         ></ion-input>
-        <ion-popover trigger="dashboarddate" size="cover">
+        <ion-popover trigger="date" size="cover">
           <ng-template>
             <ion-datetime
               presentation="date"
+              [(ngModel)]="selectedDate"
+              (ionChange)="onDateChanged()"
             ></ion-datetime>
           </ng-template>
         </ion-popover>

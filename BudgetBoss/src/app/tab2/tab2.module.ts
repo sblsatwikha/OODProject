@@ -8,6 +8,7 @@ import { expenseService } from '../services/expenseService.service';
 import { Tab2PageRoutingModule } from './tab2-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { categoryService } from '../services/categoryService.service';
+import { AuthService } from '../services/AuthService.service';
 @NgModule({
   imports: [
     IonicModule,
@@ -18,6 +19,6 @@ import { categoryService } from '../services/categoryService.service';
     HttpClientModule
   ],
   declarations: [Tab2Page],
-  providers: [expenseService,categoryService]
+  providers: [expenseService,categoryService,AuthService]
 })
 export class Tab2PageModule {}

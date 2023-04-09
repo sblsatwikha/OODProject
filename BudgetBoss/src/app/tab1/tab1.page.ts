@@ -3,7 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import Chart from 'chart.js/auto';
 import { ChartConfiguration } from 'chart.js';
 import { NgProgress } from 'ngx-progressbar';
-
+import { expenseService } from '../services/expenseService.service';
+import { categoryService } from '../services/categoryService.service';
+import { AuthService } from '../services/AuthService.service';
+import { SlicePipe } from '@angular/common';
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -12,26 +15,107 @@ import { NgProgress } from 'ngx-progressbar';
 
 export class Tab1Page implements OnInit {
   doughnutChart!: Chart;
-  spend = 700;
- budget=1000;
+  lineChart!:Chart;
+  spend = 0;
+  budget=1000;
   date=new Date();
-  constructor(private progress: NgProgress) { }
+  expenseData: any[] = [];
+  categoriesData: any[] = [];
+  userEmailId: any;
+  selectedDate=new Date();
+  constructor(private progress: NgProgress,private expenseService: expenseService,private categoryService: categoryService,private AuthService: AuthService) { }
 
   ngOnInit() {
-    this.createPieChart();
-    this.createLineChart();
-    this.createDoughnutchart();
-  }
-  // a function that updates the progress bar value over time
+    this.AuthService.getLoggedInUserData().then(data => {
+      this.userEmailId = data.emailId
+    });
+    this.selectedDate=new Date();
+    this.getCategories();
+    this.getExpenses();
+   
+   }
+  prepareData(){
+         // DATA FOR DONUT CHART
+        
+        let expenses=this.expenseData;
+        const currentMonth = new Date(this.selectedDate).getMonth() + 1; // getMonth() returns zero-indexed month, so adding 1 to get the actual month
+        const currentYear = new Date(this.selectedDate).getFullYear();
 
-  createPieChart() {
+        const expensesThisMonth = expenses.filter(expense => {
+          const expenseMonth = new Date(expense.expenseDate).getMonth() + 1;
+          const expenseYear = new Date(expense.expenseDate).getFullYear();
+          return expenseMonth === currentMonth && expenseYear === currentYear;
+        });
+
+        console.log(expensesThisMonth);
+        expenses=expensesThisMonth;
+        let categoryExpenses = expenses.reduce((accumulator, expense) => {
+          let category = expense.category;
+          let expensePrice = expense.expensePrice;
+          if(expense)
+          accumulator[category] = accumulator[category] ? accumulator[category] + expensePrice : expensePrice;
+          return accumulator;
+        }, {});
+        
+        let categoryNames = Object.keys(categoryExpenses);
+        let totalExpensesData = Object.values(categoryExpenses);
+        console.log(categoryNames);
+        console.log(totalExpensesData);
+        
+        this.createDoughnutchart(categoryNames,totalExpensesData);
+        
+        // DATA FOR LINE CHART
+        let lineexpenses=this.expenseData;
+        console.log(lineexpenses);
+        // Create an array of months
+        const months = Array.from({length: 12}, (_, i) => {
+          const date = new Date();
+          date.setMonth(i);
+          return date.toLocaleString('default', { month: 'long' });
+        });
+
+        // Initialize an object to store the total expenses for each month
+        const monthlyExpenses: Record<string, number> = {};
+
+      
+        for (const expense of lineexpenses) {
+          const month = new Date(expense.expenseDate).getMonth();
+          const monthName = months[month];
+          if (monthlyExpenses[monthName]) {
+            monthlyExpenses[monthName] += expense.expensePrice;
+          } else {
+            monthlyExpenses[monthName] = expense.expensePrice;
+          }
+        }
+
+        // Create an array of total expenses for each month
+        const monthlyExpenseArray = months.map((month) => monthlyExpenses[month] || 0);
+
+        // Log the results
+        console.log(months);
+        console.log(monthlyExpenseArray);
+        this.createLineChart(months,monthlyExpenseArray)
+
+        // FOR PROGRESS BAR
+        let totalSpent = 0;
+      
+        for (let i = 0; i < (totalExpensesData as number[]).length; i++) {
+          totalSpent += (totalExpensesData as number[])[i];
+        }
+        console.log(totalSpent);
+        this.spend=totalSpent;
+      }
+  createPieChart(categoryNames: string[],totalExpensesData: any[]) {
+    const colors = ['#FF6384', '#36A2EB', '#FFCE56', '#8C564B', '#00CC99', '#9966CC', '#FF9933', '#0099CC', '#FF99CC', '#6699CC', '#CCCCFF', '#CC6699'];
+
+    const labelLength=categoryNames.length+1;
     const data = {
-      labels: ['Clothing', 'Food', 'Entertainment'],
+      labels: categoryNames,
       datasets: [
         {
-          data: [300, 50, 100],
-          backgroundColor: ['#FF6384', '#003f5c', '#FFCE56'],
-          hoverBackgroundColor: ['#FF6384', '#003f5c', '#FFCE56']
+          data: totalExpensesData,
+          backgroundColor: colors.slice(0,labelLength),
+          hoverBackgroundColor: colors.slice(0,labelLength)
         }]
     };
 
@@ -49,14 +133,14 @@ export class Tab1Page implements OnInit {
     });
     
   }
-
-  createLineChart() {
+  
+  createLineChart(months: string[],monthlyExpenseArray: number[]) {
     const data = {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+      labels: months,
       datasets: [
         {
           label: 'My Monthly Spending',
-          data: [65, 59, 80, 81, 56, 55, 40],
+          data: monthlyExpenseArray,
           fill: false,
           borderColor: '#4bc0c0'
         }]
@@ -84,25 +168,26 @@ export class Tab1Page implements OnInit {
         }]
       }
     };
-
-    const lineChart = new Chart('line-chart', {
+    if (this.lineChart) {
+      this.lineChart.destroy();
+    }
+    this.lineChart= new Chart('line-chart', {
       type: 'line',
       data: data
     });
   }
-  createDoughnutchart(){
+  createDoughnutchart(categoryNames: string[],totalExpensesData: any[]){
+    const colors = ['#FF6384', '#36A2EB', '#FFCE56', '#8C564B', '#00CC99', '#9966CC', '#FF9933', '#0099CC', '#FF99CC', '#6699CC', '#CCCCFF', '#CC6699'];
+
+    const labelLength=categoryNames.length+1;
     const config: ChartConfiguration<'doughnut'> = {
       type: 'doughnut',
       data: {
-        labels: ['Clothing', 'Food', 'Entertainment'],
+        labels: categoryNames,
         datasets: [{
-          label: 'My First Dataset',
-          data: [300, 50, 100],
-          backgroundColor: [
-            'rgb(255, 99, 132)',
-            'rgb(54, 162, 235)',
-            'rgb(255, 205, 86)'
-          ],
+          label: '',
+          data: totalExpensesData,
+          backgroundColor: colors.slice(0,labelLength),
           hoverOffset: 4
         }]
       },
@@ -119,9 +204,61 @@ export class Tab1Page implements OnInit {
         }
       }
     };
-
+    if (this.doughnutChart) {
+      this.doughnutChart.destroy();
+    }
     this.doughnutChart = new Chart('myChart', config);
   }
-   
+
+  getCategories(){
+    this.categoryService.getAllCategoriesData().subscribe(
+      (data: any) => {
+        console.log(data);
+        let newData = [];
+        if (!(data instanceof Array)) {
+          newData.push(data);
+          this.categoriesData=newData;
+        }else {
+          this.categoriesData=data;
+        }
+       
+      },
+      (error: any) => {
+        console.error(error);
+       
+      }
+    );
+  }
+  getExpenses(){
+    this.expenseService.getAllExpensesData().subscribe(
+      (data: any) => {
+        console.log(data);
+        let newData = [];
+        if (!(data instanceof Array)) {
+          newData.push(data);
+          this.expenseData=newData;
+        }else {
+          this.expenseData=data;
+        }
+        this.prepareData();
+      },
+      (error: any) => {
+        console.error(error);
+
+      }
+    );
+    
+  }
+  doRefresh(event: any){
+    console.log(event);
+    this.getExpenses();
+    setTimeout(() => {
+      console.log('Refresh operation complete');
+      event.target.complete();
+    }, 2000);
+  } 
+  onDateChanged(){
+    this.getExpenses();
+  }
   
 }

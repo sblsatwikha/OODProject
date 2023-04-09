@@ -77,7 +77,7 @@
             <ion-input type="text" class="ion-text-end" label="Default input" [(ngModel)]="subname"></ion-input>
           </ion-item> -->
           <ion-item>
-            <ion-label >Billing Date</ion-label>
+            <ion-label >Date</ion-label>
             <ion-input
             value="{{ expdate | date: 'dd/MM/yyyy' }}"
             id="date"
@@ -94,12 +94,13 @@
           </ion-item>
           <ion-item>
             <ion-label >Category</ion-label>
-            <ion-select aria-label="Category" [(ngModel)]="category" placeholder="Select category">
-              <ion-select-option value="food">Food</ion-select-option>
-              <ion-select-option value="entertainment">Entertainment</ion-select-option>
-              <ion-select-option value="shopping">Shopping</ion-select-option>
-              <ion-select-option value="rent">Rent</ion-select-option>
+            <ion-select aria-label="Category" placeholder="Select category" [(ngModel)]="category">
+              <ion-select-option *ngFor="let category of categoriesData" [value]="category.categoryName">
+                {{category.categoryName}}
+              </ion-select-option>
             </ion-select>
+            
+            
           </ion-item>
     
           <ion-item>

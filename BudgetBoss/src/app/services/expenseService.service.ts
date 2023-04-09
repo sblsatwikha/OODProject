@@ -41,7 +41,13 @@ getAllExpensesData() {
     return this.http.get(`${this.uri}/getExpenses`,httpOptions);
   }
   saveExpense(data:any){
-    return this.http.post(`${this.uri}/newExpense`, data);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json"
+      }),
+      withCredentials: true
+    };
+    return this.http.post(`${this.uri}/newExpense`, data,httpOptions);
   }
 
   
