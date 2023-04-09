@@ -56,12 +56,12 @@ export class subscriptionService {
 getSubscriptionsData() {
     console.log('Subscription service triggered');
     this.setCookie();
+    console.log(this.cookieService.getAll());
     const httpOptions = {
         headers: new HttpHeaders({
-          "Content-Type": "application/json",
-          "Set-Cookie": "JWT-TOKEN=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdW1hbnRoMUBnbWFpbC5jb20iLCJpYXQiOjE2ODA5Nzg4ODksImV4cCI6MTY4MDk4MDY4OX0._Ao2GJx7Vbl_SsjQp56e0EkzVoyRNRHfdS2EG9qsEAs1mxi74fmxtV15aKRRa2opkHj-wTOioqJETkSk8CFVZg"
+          "Content-Type": "application/json"
         }),
-        // withCredentials: true
+        withCredentials: true
       };
     //   document.cookie = {'JWT-TOKEN': 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdW1hbnRoMUBnbWFpbC5jb20iLCJpYXQiOjE2ODA5Nzg4ODksImV4cCI6MTY4MDk4MDY4OX0._Ao2GJx7Vbl_SsjQp56e0EkzVoyRNRHfdS2EG9qsEAs1mxi74fmxtV15aKRRa2opkHj-wTOioqJETkSk8CFVZg'}
     return this.http.get(`${this.uri}/getSubscriptions`,httpOptions);
@@ -69,7 +69,7 @@ getSubscriptionsData() {
   setCookie() {
     const expires = new Date();
     expires.setMinutes(expires.getMinutes() + 30);
-    this.cookieService.set('JWT-TOKEN', 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdW1hbnRoMUBnbWFpbC5jb20iLCJpYXQiOjE2ODA5Nzg4ODksImV4cCI6MTY4MDk4MDY4OX0._Ao2GJx7Vbl_SsjQp56e0EkzVoyRNRHfdS2EG9qsEAs1mxi74fmxtV15aKRRa2opkHj-wTOioqJETkSk8CFVZg', expires, '/api', 'localhost', true, 'Lax');
+    this.cookieService.set('JWT-TOKEN', 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdW1hbnRoMUBnbWFpbC5jb20iLCJpYXQiOjE2ODA5OTkxNDEsImV4cCI6MTY4MTA4NTU0MX0.4yE7NhtUACb38Oknwv8JnLaqIXtYmUmXn3UaQPdRo3XtwYFV6jeXR7662BaJXKj_ulK16xF6VMvMNgxk4Rw5EA', expires, '/api', 'localhost', true, 'Lax');
   }
   
 
