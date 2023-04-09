@@ -24,8 +24,9 @@ export class Tab3Page {
   //   { name: 'Youtube Premium', price: 30}
   // ];
   // /subscription/getSubscriptions
-  subscriptionsData = [ {name:"",
-  price:""}
+  subscriptionsData = [ {
+    subscriptionName:"",
+    subscriptionPrice:""}
 ];
   subname: string="";
   price:number=0;
@@ -64,7 +65,14 @@ export class Tab3Page {
     this.subscriptionService.getSubscriptionsData().subscribe(
       (data: any) => {
         console.log(data);
-        this.subscriptionsData=data;
+        let newData = [];
+        if (!(data instanceof Array)) {
+          newData.push(data);
+          this.subscriptionsData=newData;
+        }else {
+          this.subscriptionsData=data;
+        }
+        
         // Success function
         // this.presentToast(data.message);
         // this.router.navigateByUrl('', { replaceUrl: true });

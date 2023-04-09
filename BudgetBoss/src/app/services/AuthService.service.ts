@@ -7,7 +7,7 @@ import { JwtHelperService } from "@auth0/angular-jwt";
 import {Storage} from '@ionic/storage';
 import { Platform } from '@ionic/angular';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
+import { CookieService } from 'ngx-cookie-service';
 @Injectable({
     providedIn: 'root'
   })
@@ -20,7 +20,8 @@ export class AuthService {
   constructor(
     private readonly storage:Storage,
     private readonly platform:Platform,
-    private readonly http:HttpClient
+    private readonly http:HttpClient,
+    private cookieService: CookieService
   ) {
     this.storage.create();
     this.loadUserInfo();
@@ -82,6 +83,7 @@ export class AuthService {
           console.log(response);
           this.storage.set('access_token',response.token);
           this.storage.set('userData',response);
+          this.setCookie(response.token);
         //   console.log(decodedUser);
         //   this.storage.set('refresh_token', response.refresh_token);
           var decodedUser = this.jwtHelper.decodeToken(response.token);
@@ -94,4 +96,10 @@ export class AuthService {
     
     return of(false);
   }
+  setCookie(token:any) {
+    // const expires = new Date();
+    // expires.setMinutes(expires.getMinutes() + 30);
+    this.cookieService.set('JWT-TOKEN', token );
+  }
+  
 }
