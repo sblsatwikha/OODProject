@@ -3,8 +3,8 @@ import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { PopoverController } from '@ionic/angular';
 import { subscriptionService } from '../services/subscriptionService.service';
-import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from '../services/AuthService.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tab3',
@@ -17,44 +17,38 @@ export class Tab3Page {
 
   constructor(public popoverController: PopoverController,
     private subscriptionService: subscriptionService,
-    private cookieService: CookieService,
-    private AuthService: AuthService
-    ) {
+    private AuthService: AuthService,
+    private router: Router
+  ) {
   }
 
+  subscriptionsData = [{
+    subscriptionName: "",
+    subscriptionPrice: ""
+  }
+  ];
 
-  // items = [
-  //   { name: 'Apple iCloud', price: 10},
-  //   { name: 'Google One', price: 20 },
-  //   { name: 'Spotify Premium', price: 30},
-  //   { name: 'Youtube Premium', price: 30}
-  // ];
-  // /subscription/getSubscriptions
-  subscriptionsData = [ {
-    subscriptionName:"",
-    subscriptionPrice:""}
-];
-  subname: string="";
-  price:any=0;
-  billdate:Date=new Date();
-  billcycle:string="";
-  reminder:string="";
-  note:string="";
+  subname: string = "";
+  price: any = 0;
+  billdate: Date = new Date();
+  billcycle: string = "";
+  reminder: string = "";
+  note: string = "";
   cancel() {
     this.modal.dismiss(null, 'cancel');
   }
 
   confirm() {
     this.modal.dismiss(this.subname, 'confirm');
-    const newData={
+    const newData = {
       "emailId": this.userEmailId,
-      "subscriptionName":this.subname,
-      "subscriptionPrice":this.price,
-      "billingCycle":this.billcycle,
-      "billingDate":this.billdate,
-      "sendReminder":this.reminder,
-      "note":this.note,
-      
+      "subscriptionName": this.subname,
+      "subscriptionPrice": this.price,
+      "billingCycle": this.billcycle,
+      "billingDate": this.billdate,
+      "sendReminder": this.reminder,
+      "note": this.note,
+
     }
     this.subscriptionService.postNewSubscription(newData).subscribe((data: any) => {
       console.log(data)
@@ -62,32 +56,32 @@ export class Tab3Page {
     });
     ;
   }
-  
+
   ngOnInit() {
     this.AuthService.getLoggedInUserData().then(data => {
       this.userEmailId = data.emailId
     });
-    this.getSubData();  
+    this.getSubData();
   }
 
   onWillDismiss(event: Event) {
     const ev = event as CustomEvent<OverlayEventDetail<string>>;
     if (ev.detail.role === 'confirm') {
-      
+
     }
   }
-  getSubData(){
+  getSubData() {
     this.subscriptionService.getSubscriptionsData().subscribe(
       (data: any) => {
         console.log(data);
         let newData = [];
         if (!(data instanceof Array)) {
           newData.push(data);
-          this.subscriptionsData=newData;
-        }else {
-          this.subscriptionsData=data;
+          this.subscriptionsData = newData;
+        } else {
+          this.subscriptionsData = data;
         }
-        
+
         // Success function
         // this.presentToast(data.message);
         // this.router.navigateByUrl('', { replaceUrl: true });
@@ -99,13 +93,18 @@ export class Tab3Page {
       }
     );
   }
-  doRefresh(event: any){
+  doRefresh(event: any) {
     console.log(event);
     this.getSubData();
     setTimeout(() => {
       console.log('Refresh operation complete');
       event.target.complete();
     }, 2000);
+  }
+
+  displayExpense(subscription: any) {
+    console.log(subscription.subscriptionName)
+    this.router.navigate(['/display-expense'], { queryParams: { expenseData: JSON.stringify(subscription) } })
   }
 
 }

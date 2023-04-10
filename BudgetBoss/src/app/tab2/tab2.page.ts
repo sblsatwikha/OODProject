@@ -132,7 +132,6 @@ export class Tab2Page {
   }
 
   displayExpense(expense: any){
-    console.log(expense.expenseName);
     this.router.navigate(['/display-expense'], {queryParams: {expenseData: JSON.stringify(expense)}})
   }
 

@@ -3,10 +3,10 @@
     <ion-title>
       Subscriptions
     </ion-title>
-   
-    
+
+
   </ion-toolbar>
- 
+
 </ion-header>
 
 <ion-content [fullscreen]="true">
@@ -16,35 +16,32 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-card-content  class="subscripHBox">
+  <ion-card-content class="subscripHBox">
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-      <ion-refresher-content
-        pullingIcon="arrow-down"
-        pullingText="Pull to refresh"
-        refreshingSpinner="circles"
+      <ion-refresher-content pullingIcon="arrow-down" pullingText="Pull to refresh" refreshingSpinner="circles"
         refreshingText="Refreshing...">
       </ion-refresher-content>
     </ion-refresher>
     <ion-searchbar placeholder="Search"></ion-searchbar>
-      <ion-button id="open-modal"  expand="block" class="subcripBtn" size="large" fill="clear">
-        <ion-icon name="add"></ion-icon>
-      </ion-button>
-      
-     </ion-card-content>
-     <ion-list>
-      <ion-item detail="true" *ngFor="let subscription of subscriptionsData">
-        <ion-label>
-          <div class="subscrip-item-container">
+    <ion-button id="open-modal" expand="block" class="subcripBtn" size="large" fill="clear">
+      <ion-icon name="add"></ion-icon>
+    </ion-button>
+
+  </ion-card-content>
+  <ion-list>
+    <ion-item detail="true" *ngFor="let subscription of subscriptionsData" (click)="displayExpense(subscription)">
+      <ion-label>
+        <div class="subscrip-item-container">
           <h2>{{ subscription.subscriptionName }}</h2>
           <h2> $ {{ subscription.subscriptionPrice }}</h2>
-          </div>
-        </ion-label>
-      </ion-item>
-    </ion-list>
+        </div>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 
-  
-  
- 
+
+
+
   <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
     <ng-template>
       <ion-header>
@@ -59,24 +56,26 @@
         </ion-toolbar>
       </ion-header>
 
-      <ion-content >
+      <ion-content>
         <ion-card color="medium">
           <ion-card-header>
             <ion-card-title>New Subscription</ion-card-title>
-            
+
             <!-- <ion-input label="Outline input" label-placement="floating" fill="outline" placeholder="Enter text"></ion-input> -->
           </ion-card-header>
-        
+
           <ion-card-content>
-            <ion-input label="Outline input" label-placement="floating" fill="outline" placeholder="Enter Name" [(ngModel)]="subname"></ion-input>
+            <ion-input label="Outline input" label-placement="floating" fill="outline" placeholder="Enter Name"
+              [(ngModel)]="subname"></ion-input>
             <!-- <ion-input type="text" label="Default input" [(ngModel)]="subname"></ion-input> -->
-           
+
             <ion-row class="ion-justify-content-center">
               <ion-icon name="logo-usd"></ion-icon>
-              <ion-input label="Outline input" label-placement="floating" type="number"  fill="outline" placeholder="0.00" [(ngModel)]="price"></ion-input>
-            
+              <ion-input label="Outline input" label-placement="floating" type="number" fill="outline"
+                placeholder="0.00" [(ngModel)]="price"></ion-input>
+
             </ion-row>
-            
+
           </ion-card-content>
         </ion-card>
         <!-- <ion-item>
@@ -84,23 +83,16 @@
           <ion-input type="text" class="ion-text-end" label="Default input" [(ngModel)]="subname"></ion-input>
         </ion-item> -->
         <ion-item>
-          <ion-label >Billing Date</ion-label>
-          <ion-input
-          value="{{ billdate | date: 'dd/MM/yyyy' }}"
-          id="date"
-          class="ion-text-end"
-        ></ion-input>
-        <ion-popover trigger="date" size="cover">
-          <ng-template>
-            <ion-datetime
-              presentation="date"
-              [(ngModel)]="billdate"
-            ></ion-datetime>
-          </ng-template>
-        </ion-popover>
+          <ion-label>Billing Date</ion-label>
+          <ion-input value="{{ billdate | date: 'dd/MM/yyyy' }}" id="date" class="ion-text-end"></ion-input>
+          <ion-popover trigger="date" size="cover">
+            <ng-template>
+              <ion-datetime presentation="date" [(ngModel)]="billdate"></ion-datetime>
+            </ng-template>
+          </ion-popover>
         </ion-item>
         <ion-item>
-          <ion-label >Billing Cycle</ion-label>
+          <ion-label>Billing Cycle</ion-label>
           <ion-select aria-label="billingcycle" placeholder="Select cycle" [(ngModel)]="billcycle">
             <ion-select-option value="daily">Daily</ion-select-option>
             <ion-select-option value="weekly">Weekly</ion-select-option>
@@ -109,7 +101,7 @@
           </ion-select>
         </ion-item>
         <ion-item>
-          <ion-label >Send Reminder</ion-label>
+          <ion-label>Send Reminder</ion-label>
           <ion-select aria-label="reminder" placeholder="Select reminder type" [(ngModel)]="reminder">
             <ion-select-option value="never">Never</ion-select-option>
             <ion-select-option value="sameday">Same Day</ion-select-option>
@@ -127,4 +119,3 @@
     </ng-template>
   </ion-modal>
 </ion-content>
-
