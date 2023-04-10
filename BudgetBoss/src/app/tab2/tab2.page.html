@@ -12,102 +12,95 @@
       <ion-title size="large">Expenses</ion-title>
     </ion-toolbar>
   </ion-header>
-  <ion-card-content  class="expenseHBox">
+  <ion-card-content class="expenseHBox">
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-      <ion-refresher-content
-        pullingIcon="arrow-down"
-        pullingText="Pull to refresh"
-        refreshingSpinner="circles"
+      <ion-refresher-content pullingIcon="arrow-down" pullingText="Pull to refresh" refreshingSpinner="circles"
         refreshingText="Refreshing...">
       </ion-refresher-content>
     </ion-refresher>
     <ion-searchbar placeholder="Search"></ion-searchbar>
-      <ion-button id="open-Expense-modal"  expand="block" class="subcripBtn" size="large" fill="clear">
-        <ion-icon name="add"></ion-icon>
-      </ion-button>
-      
-     </ion-card-content>
-     <ion-list>
-      <ion-item detail="true" *ngFor="let expense of expenseData">
-        <ion-label>
-          <div class="expense-item-container">
+    <ion-button id="open-Expense-modal" expand="block" class="subcripBtn" size="large" fill="clear">
+      <ion-icon name="add"></ion-icon>
+    </ion-button>
+
+  </ion-card-content>
+  <ion-list>
+    <ion-item detail="true" *ngFor="let expense of expenseData" (click)="displayExpense(expense)">
+      <ion-label>
+        <div class="expense-item-container">
           <h2>{{ expense.expenseName }}</h2>
           <h2> $ {{ expense.expensePrice }}</h2>
-          </div>
-          <p>Description: {{ expense.description }}</p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
-    <ion-modal trigger="open-Expense-modal" (willDismiss)="onWillDismiss($event)">
-      <ng-template>
-        <ion-header>
-          <ion-toolbar>
-            <ion-buttons slot="start">
-              <ion-button (click)="cancel()">Cancel</ion-button>
-            </ion-buttons>
-            <ion-title>Add</ion-title>
-            <ion-buttons slot="end">
-              <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
-  
-        <ion-content >
-          <ion-card color="medium">
-            <ion-card-header>
-              <ion-card-title>New Expense</ion-card-title>
-              
-              <!-- <ion-input label="Outline input" label-placement="floating" fill="outline" placeholder="Enter text"></ion-input> -->
-            </ion-card-header>
-          
-            <ion-card-content>
-              <ion-input label="Outline input" label-placement="floating" fill="outline" placeholder="Enter Expense Name" [(ngModel)]="expname"></ion-input>
-              <!-- <ion-input type="text" label="Default input" [(ngModel)]="subname"></ion-input> -->
-             
-              <ion-row class="ion-justify-content-center">
-                <ion-icon name="logo-usd"></ion-icon>
-                <ion-input label="Outline input" label-placement="floating" type="number"  fill="outline" placeholder="0.00" [(ngModel)]="price"></ion-input>
-              
-              </ion-row>
-              
-            </ion-card-content>
-          </ion-card>
-          <!-- <ion-item>
+        </div>
+        <p>Description: {{ expense.description }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <ion-modal trigger="open-Expense-modal" (willDismiss)="onWillDismiss($event)">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button (click)="cancel()">Cancel</ion-button>
+          </ion-buttons>
+          <ion-title>Add</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content>
+        <ion-card color="medium">
+          <ion-card-header>
+            <ion-card-title>New Expense</ion-card-title>
+
+            <!-- <ion-input label="Outline input" label-placement="floating" fill="outline" placeholder="Enter text"></ion-input> -->
+          </ion-card-header>
+
+          <ion-card-content>
+            <ion-input label="Outline input" label-placement="floating" fill="outline" placeholder="Enter Expense Name"
+              [(ngModel)]="expname"></ion-input>
+            <!-- <ion-input type="text" label="Default input" [(ngModel)]="subname"></ion-input> -->
+
+            <ion-row class="ion-justify-content-center">
+              <ion-icon name="logo-usd"></ion-icon>
+              <ion-input label="Outline input" label-placement="floating" type="number" fill="outline"
+                placeholder="0.00" [(ngModel)]="price"></ion-input>
+
+            </ion-row>
+
+          </ion-card-content>
+        </ion-card>
+        <!-- <ion-item>
             <ion-label >Enter Name</ion-label>
             <ion-input type="text" class="ion-text-end" label="Default input" [(ngModel)]="subname"></ion-input>
           </ion-item> -->
-          <ion-item>
-            <ion-label >Date</ion-label>
-            <ion-input
-            value="{{ expdate | date: 'dd/MM/yyyy' }}"
-            id="date"
-            class="ion-text-end"
-          ></ion-input>
+        <ion-item>
+          <ion-label>Date</ion-label>
+          <ion-input value="{{ expdate | date: 'dd/MM/yyyy' }}" id="date" class="ion-text-end"></ion-input>
           <ion-popover trigger="date" size="cover">
             <ng-template>
-              <ion-datetime
-                presentation="date"
-                [(ngModel)]="expdate"
-              ></ion-datetime>
+              <ion-datetime presentation="date" [(ngModel)]="expdate"></ion-datetime>
             </ng-template>
           </ion-popover>
-          </ion-item>
-          <ion-item>
-            <ion-label >Category</ion-label>
-            <ion-select aria-label="Category" placeholder="Select category" [(ngModel)]="category">
-              <ion-select-option *ngFor="let category of categoriesData" [value]="category.categoryName">
-                {{category.categoryName}}
-              </ion-select-option>
-            </ion-select>
-            
-            
-          </ion-item>
-    
-          <ion-item>
-            <ion-label position="stacked">Description</ion-label>
-            <ion-textarea [(ngModel)]="description" label="Regular textarea" placeholder="Type something here"></ion-textarea>
-          </ion-item>
-        </ion-content>
-      </ng-template>
-    </ion-modal>
+        </ion-item>
+        <ion-item>
+          <ion-label>Category</ion-label>
+          <ion-select aria-label="Category" placeholder="Select category" [(ngModel)]="category">
+            <ion-select-option *ngFor="let category of categoriesData" [value]="category.categoryName">
+              {{category.categoryName}}
+            </ion-select-option>
+          </ion-select>
+
+
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Description</ion-label>
+          <ion-textarea [(ngModel)]="description" label="Regular textarea"
+            placeholder="Type something here"></ion-textarea>
+        </ion-item>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

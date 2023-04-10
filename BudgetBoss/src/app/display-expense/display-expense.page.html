@@ -1,0 +1,23 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{expenseDetails.expenseName}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" style="height: 100%;">
+  <ion-card style="height: 80%;">
+    <div *ngFor="let key of expenseKeys">
+      <ion-item  *ngIf="key !== 'id'">
+        <ion-label >{{key}}</ion-label>
+        <ion-input [value]="expenseDetails[key]" slot="end"></ion-input>
+      </ion-item>
+    </div>
+  </ion-card>
+  <div>
+    <ion-button style="width: 30%; margin-left: 10%;">Save</ion-button>
+    <ion-button style="width: 30%; float: right; margin-right: 10%;" routerLink="/tabs/tab2">Cancel</ion-button>
+  </div>
+</ion-content>
