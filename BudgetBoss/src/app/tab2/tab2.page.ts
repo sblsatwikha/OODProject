@@ -59,7 +59,7 @@ export class Tab2Page {
       "description": this.description,
     }
 
-    this.expenseService.saveExpense(payload).subscribe(
+    this.expenseService.postNewExpense(payload).subscribe(
       (data: any) => {
         console.log(data);
         this.getExpenses();
@@ -132,7 +132,13 @@ export class Tab2Page {
   }
 
   displayExpense(expense: any){
-    this.router.navigate(['/display-expense'], {queryParams: {expenseData: JSON.stringify(expense)}})
+    this.router.navigate(['/display-expense'], {queryParams: {expenseData: JSON.stringify(expense), isSubscription: JSON.stringify(false)}})
+  }
+
+  deleteExpense(expense: any){
+    this.expenseService.deleteExpense(expense).subscribe(data => {
+      this.getExpenses();
+    })
   }
 
 }

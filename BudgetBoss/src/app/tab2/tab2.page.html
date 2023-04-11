@@ -25,16 +25,25 @@
 
   </ion-card-content>
   <ion-list>
-    <ion-item detail="true" *ngFor="let expense of expenseData" (click)="displayExpense(expense)">
-      <ion-label>
-        <div class="expense-item-container">
-          <h2>{{ expense.expenseName }}</h2>
-          <h2> $ {{ expense.expensePrice }}</h2>
-        </div>
-        <p>Description: {{ expense.description }}</p>
-      </ion-label>
-    </ion-item>
+    <ion-item-sliding *ngFor="let expense of expenseData">
+      <ion-item (click)="displayExpense(expense)">
+        <ion-label>
+          <div class="expense-item-container">
+            <h2>{{ expense.expenseName }}</h2>
+            <h2> $ {{ expense.expensePrice }}</h2>
+          </div>
+          <p>Description: {{ expense.description }}</p>
+        </ion-label>
+      </ion-item>
+  
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="deleteExpense(expense)">
+          Delete
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>   
   </ion-list>
+
   <ion-modal trigger="open-Expense-modal" (willDismiss)="onWillDismiss($event)">
     <ng-template>
       <ion-header>

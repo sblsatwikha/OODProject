@@ -102,9 +102,15 @@ export class Tab3Page {
     }, 2000);
   }
 
-  displayExpense(subscription: any) {
-    console.log(subscription.subscriptionName)
-    this.router.navigate(['/display-expense'], { queryParams: { expenseData: JSON.stringify(subscription) } })
+  displaySubscription(subscription: any) {
+    this.router.navigate(['/display-expense'], { queryParams: { expenseData: JSON.stringify(subscription), isSubscription: JSON.stringify(true) } })
+  }
+
+  deleteSubscription(subscription: any){
+    this.subscriptionService.deleteSubscription(subscription).subscribe(data => {
+      console.log(data);
+      this.getSubData();
+    })
   }
 
 }
