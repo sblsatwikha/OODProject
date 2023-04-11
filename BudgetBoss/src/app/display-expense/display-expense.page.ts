@@ -85,25 +85,23 @@ export class DisplayExpensePage implements OnInit {
     if(this.isSubscription){
       this.subscriptionService.updateSubscription(this.expenseDetails).subscribe(data => {
         console.log(data.message)
-        // this.router.navigate(['/tabs/tab3'])
-        this.router.navigateByUrl('/tabs/tab3')
-        // this.router.navigateByUrl('tab3', { replaceUrl: true });
-        // this.showAlert(data)
-        
+        this.router.navigate(['/tabs/tab3'])
+          .then(() => {
+            window.location.reload();
+          });
       })
-      // this.navCtrl.navigateRoot(['/tabs/tab3'])
-      // this.router.navigate(['/tabs/tab3'])
-      // this.router.navigateByUrl('/tabs/tab3')
     } 
     else{
       console.log("else")
       this.expensiveService.updateExpense(this.expenseDetails).subscribe(data => {
         console.log(data)
-        this.navCtrl.navigateRoot(['/tabs/tab2'])
+        this.router.navigate(['/tabs/tab2'])
+        .then(() => {
+          window.location.reload();
+        });
       })
     }
   }
-
   // async showAlert(data: any){
   //   const alert = await this.alertCtrl.create({  
   //     header: data.message,  

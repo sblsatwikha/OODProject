@@ -66,7 +66,7 @@ export class Tab3Page {
     this.getSubData();
   }
   
-  ionViewWillEnter(){
+  ionViewDidEnter(){
     console.log("ionViewWillEnter")
   }
   
