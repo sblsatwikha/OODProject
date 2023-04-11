@@ -32,24 +32,22 @@ export class DisplayExpensePage implements OnInit {
   }
 
   updateDetails(){
-    console.log(JSON.stringify(this.expenseDetails))
     if(this.isSubscription){
       this.subscriptionService.updateSubscription(this.expenseDetails).subscribe(data => {
         console.log(data.message)
-        // this.router.navigate(['/tabs/tab3'])
-        // this.router.navigateByUrl('/tabs/tab3')
-
-        // this.showAlert(data)
+        this.navCtrl.navigateRoot(['/tabs/tab3'])
+      },
+      (error: any) => {
+        console.error(error);
       })
-      this.navCtrl.navigateRoot(['/tabs/tab3'])
-      // this.router.navigate(['/tabs/tab3'])
-      // this.router.navigateByUrl('/tabs/tab3')
     } 
     else{
-      console.log("else")
       this.expensiveService.updateExpense(this.expenseDetails).subscribe(data => {
-        console.log(data)
-       
+        console.log(data.message)
+        this.router.navigate(['/tabs/tab2'])
+      },
+      (error: any) => {
+        console.error(error);
       })
     }
   }
@@ -57,10 +55,15 @@ export class DisplayExpensePage implements OnInit {
   // async showAlert(data: any){
   //   const alert = await this.alertCtrl.create({  
   //     header: data.message,  
-  //     buttons: ['OK']  
+  //     buttons: [{
+  //       text: 'OK',
+  //       handler: () => {
+  //         console.log('User clicked OK');
+  //         this.router.navigate(['/tabs/tab2'])
+  //       }
+  //     }] 
   //   });  
   //   await alert.present();
-    
   // }
 
 }

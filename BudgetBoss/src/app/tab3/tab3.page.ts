@@ -121,6 +121,9 @@ export class Tab3Page {
     this.subscriptionService.deleteSubscription(subscription).subscribe(data => {
       console.log(data);
       this.getSubData();
+    },
+    (error: any) => {
+      console.error(error);
     })
   }
 
