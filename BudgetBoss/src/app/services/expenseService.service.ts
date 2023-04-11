@@ -51,6 +51,17 @@ export class expenseService {
     return this.http.post(`${this.url}/newExpense`, data, httpOptions);
   }
 
+  updateExpense(expense: any){
+    console.log(JSON.stringify(expense));
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json"
+      }),
+      withCredentials: true
+    };
+    return this.http.put(`${this.url}/updateExpense`, httpOptions);
+  }
+
   deleteExpense(expense: any){
     const httpOptions = {
       headers: new HttpHeaders({

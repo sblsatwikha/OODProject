@@ -79,6 +79,17 @@ export class subscriptionService {
 
   }
 
+  updateSubscription(updatedSubscription: any) {
+    console.log(updatedSubscription['subscriptionName']);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      }),
+      withCredentials: true
+    };
+    return this.http.put<any>(`${this.url}/updateSubscription`, updatedSubscription, httpOptions);
+  }
+
   deleteSubscription(subscription: any) {
     const httpOptions = {
       headers: new HttpHeaders({

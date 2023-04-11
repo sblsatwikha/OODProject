@@ -12,12 +12,12 @@
     <div *ngFor="let key of expenseKeys">
       <ion-item  *ngIf="key !== 'id'">
         <ion-label >{{key}}</ion-label>
-        <ion-input [value]="expenseDetails[key]" slot="end"></ion-input>
+        <ion-input [(ngModel)]="expenseDetails[key]" slot="end"></ion-input>
       </ion-item>
     </div>
   </ion-card>
   <div>
-    <ion-button style="width: 30%; margin-left: 10%;">Save</ion-button>
-    <ion-button style="width: 30%; float: right; margin-right: 10%;" routerLink="/tabs/tab2">Cancel</ion-button>
+    <ion-button style="width: 30%; margin-left: 10%;" (click)="updateDetails()">Save</ion-button>
+    <ion-button style="width: 30%; float: right; margin-right: 10%;" [routerLink]="!isSubscription ? ['/tabs/tab2'] : ['/tabs/tab3']">Cancel</ion-button>
   </div>
 </ion-content>

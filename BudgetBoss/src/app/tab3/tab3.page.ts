@@ -58,11 +58,22 @@ export class Tab3Page {
   }
 
   ngOnInit() {
+    console.log("NGONINIT")
+
     this.AuthService.getLoggedInUserData().then(data => {
       this.userEmailId = data.emailId
     });
     this.getSubData();
   }
+
+  ionViewWillEnter(){
+    console.log("ionViewWillEnter")
+  }
+  ionViewDidEnter(){
+    console.log("ionViewDidEnter")
+    // this.getSubData();
+  }
+
 
   onWillDismiss(event: Event) {
     const ev = event as CustomEvent<OverlayEventDetail<string>>;
