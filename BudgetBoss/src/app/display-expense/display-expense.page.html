@@ -12,7 +12,42 @@
     <div *ngFor="let key of expenseKeys">
       <ion-item  *ngIf="key !== 'id'">
         <ion-label >{{key}}</ion-label>
-        <ion-input [(ngModel)]="expenseDetails[key]" slot="end"></ion-input>
+        <ng-container *ngIf="key !== 'category' && key !== 'expenseDate' && key !== 'billingDate' && key !== 'billingCycle' && key !== 'sendReminder'">
+          <ion-input [(ngModel)]="expenseDetails[key]" class="ion-text-end" slot="end"></ion-input>
+        </ng-container>
+        
+        <ion-select aria-label="Category" placeholder="Select category" *ngIf="key === 'category'" [(ngModel)]="expenseDetails[key]">
+          <ion-select-option *ngFor="let category of categoriesData" [value]="category.categoryName">
+            {{category.categoryName}}
+          </ion-select-option>
+        </ion-select>
+        <ng-container *ngIf="key == 'expenseDate' || key == 'billingDate'">
+            <ion-input value="{{ expenseDetails[key] | date: 'dd/MM/yyyy' }}" id="date" class="ion-text-end"></ion-input>
+            <ion-popover trigger="date" size="cover">
+              <ng-template>
+                <ion-datetime presentation="date" [(ngModel)]="expenseDetails[key]"></ion-datetime>
+              </ng-template>
+            </ion-popover>
+        </ng-container>
+        <ng-container *ngIf="key == 'billingCycle'">
+          <ion-select aria-label="billingcycle" placeholder="Select cycle" [(ngModel)]="expenseDetails[key]">
+            
+              <ion-select-option value="daily">Daily</ion-select-option>
+              <ion-select-option value="weekly">Weekly</ion-select-option>
+              <ion-select-option value="monthly">Monthly</ion-select-option>
+              <ion-select-option value="yearly">Yearly</ion-select-option>
+            </ion-select>
+         
+      </ng-container>
+      <ng-container *ngIf="key == 'sendReminder'">
+        <ion-select aria-label="reminder" placeholder="Select reminder type" [(ngModel)]="expenseDetails[key]">
+          <ion-select-option value="never">Never</ion-select-option>
+          <ion-select-option value="sameday">Same Day</ion-select-option>
+          <ion-select-option value="oneday">One Day Prior</ion-select-option>
+          <ion-select-option value="twodays">Two Days Prior</ion-select-option>
+          <ion-select-option value="threedays">Three Days Prior</ion-select-option>
+        </ion-select>
+      </ng-container>
       </ion-item>
     </div>
   </ion-card>
