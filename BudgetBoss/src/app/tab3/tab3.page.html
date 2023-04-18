@@ -91,6 +91,16 @@
           <ion-input type="text" class="ion-text-end" label="Default input" [(ngModel)]="subname"></ion-input>
         </ion-item> -->
         <ion-item>
+          <ion-label>Category</ion-label>
+          <ion-select aria-label="Category" placeholder="Select category" [(ngModel)]="category">
+            <ion-select-option *ngFor="let category of categoriesData" [value]="category.categoryName">
+              {{category.categoryName}}
+            </ion-select-option>
+          </ion-select>
+
+
+        </ion-item>
+        <ion-item>
           <ion-label>Billing Date</ion-label>
           <ion-input value="{{ billdate | date: 'dd/MM/yyyy' }}" id="date" class="ion-text-end"></ion-input>
           <ion-popover trigger="date" size="cover">

@@ -7,6 +7,7 @@ import { categoryService } from '../services/categoryService.service';
 import { AuthService } from '../services/AuthService.service';
 import { budgetService } from '../services/budgetService.service';
 import * as XLSX from 'xlsx';
+import { subscriptionService } from '../services/subscriptionService.service';
 export interface BudgetData {
   budget: number;
 
@@ -25,6 +26,7 @@ export class Tab1Page implements OnInit {
   months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   date=new Date();
   expenseData: any[] = [];
+  subscriptionData: any[] = [];
   categoriesData: any[] = [];
   userEmailId: any;
   selectedDate=new Date();
@@ -32,7 +34,7 @@ export class Tab1Page implements OnInit {
   fullName: any;
   
   constructor(private progress: NgProgress,private expenseService: expenseService,private categoryService: categoryService,
-    private AuthService: AuthService,private BudgetService: budgetService) { }
+    private AuthService: AuthService,private BudgetService: budgetService,private subscriptionService: subscriptionService) { }
 
   ngOnInit() {
     this.AuthService.getLoggedInUserData().then(data => {
@@ -57,22 +59,28 @@ export class Tab1Page implements OnInit {
          // DATA FOR DONUT CHART
         
         let expenses=this.expenseData;
+        let subscriptions=this.subscriptionData;
+
+        let combinedArray = [...expenses, ...subscriptions];
+
         const selectedMonth = new Date(this.selectedDate).getMonth() + 1; // getMonth() returns zero-indexed month, so adding 1 to get the actual month
         const selectedYear = new Date(this.selectedDate).getFullYear();
 
-        this.expensesThisMonth = expenses.filter(expense => {
-          const expenseMonth = new Date(expense.expenseDate).getMonth() + 1;
-          const expenseYear = new Date(expense.expenseDate).getFullYear();
-          return expenseMonth === selectedMonth && expenseYear === selectedYear;
+        this.expensesThisMonth = combinedArray.filter(expense => {
+          let date = expense.expenseDate ? expense.expenseDate : expense.billingDate;
+          let month = new Date(date).getMonth() + 1;
+          let year = new Date(date).getFullYear();
+         
+          return month === selectedMonth && year === selectedYear;
         });
 
         console.log(this.expensesThisMonth);
-        expenses=this.expensesThisMonth;
-        let categoryExpenses = expenses.reduce((accumulator, expense) => {
+        combinedArray=this.expensesThisMonth;
+        let categoryExpenses = combinedArray.reduce((accumulator, expense) => {
           let category = expense.category;
-          let expensePrice = expense.expensePrice;
-          if(expense)
-          accumulator[category] = accumulator[category] ? accumulator[category] + expensePrice : expensePrice;
+          let price = expense.expensePrice ? expense.expensePrice : expense.subscriptionPrice;
+        
+          accumulator[category] = accumulator[category] ? accumulator[category] + price : price;
           return accumulator;
         }, {});
         
@@ -84,7 +92,9 @@ export class Tab1Page implements OnInit {
         this.createDoughnutchart(categoryNames,totalExpensesData);
         
         // DATA FOR LINE CHART
-        let lineexpenses=this.expenseData;
+        let lineexpenses = [...this.expenseData, ...this.subscriptionData];
+
+  
         console.log(lineexpenses);
         // Create an array of months
         const months = Array.from({length: 12}, (_, i) => {
@@ -98,12 +108,13 @@ export class Tab1Page implements OnInit {
 
       
         for (const expense of lineexpenses) {
-          const month = new Date(expense.expenseDate).getMonth();
+          let date = expense.expenseDate ? expense.expenseDate:expense.billingDate;
+          const month = new Date(date).getMonth();
           const monthName = months[month];
           if (monthlyExpenses[monthName]) {
-            monthlyExpenses[monthName] += expense.expensePrice;
+            monthlyExpenses[monthName] += expense.expensePrice? expense.expensePrice : expense.subscriptionPrice;
           } else {
-            monthlyExpenses[monthName] = expense.expensePrice;
+            monthlyExpenses[monthName] = expense.expensePrice? expense.expensePrice : expense.subscriptionPrice;
           }
         }
 
@@ -259,7 +270,7 @@ export class Tab1Page implements OnInit {
         }else {
           this.expenseData=data;
         }
-        this.prepareData();
+        this.getSubData();
       },
       (error: any) => {
         console.error(error);
@@ -291,6 +302,26 @@ export class Tab1Page implements OnInit {
     a.download = this.months[new Date(this.selectedDate).getMonth()] + new Date(this.selectedDate).getFullYear() + '.xlsx';
     a.click();
     window.URL.revokeObjectURL(url);
+  }
+
+  getSubData() {
+    this.subscriptionService.getSubscriptionsData().subscribe(
+      (data: any) => {
+        console.log(data);
+        let newData = [];
+        if (!(data instanceof Array)) {
+          newData.push(data);
+          this.subscriptionData = newData;
+        } else {
+          this.subscriptionData = data;
+        }
+        this.prepareData();
+      },
+      (error: any) => {
+        console.error(error);
+
+      }
+    );
   }
   
 }

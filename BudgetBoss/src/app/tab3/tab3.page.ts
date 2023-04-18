@@ -5,7 +5,7 @@ import { PopoverController } from '@ionic/angular';
 import { subscriptionService } from '../services/subscriptionService.service';
 import { AuthService } from '../services/AuthService.service';
 import { Router } from '@angular/router';
-
+import { categoryService } from '../services/categoryService.service';
 @Component({
   selector: 'app-tab3',
   templateUrl: 'tab3.page.html',
@@ -14,10 +14,11 @@ import { Router } from '@angular/router';
 export class Tab3Page {
   @ViewChild(IonModal) modal: any;
   userEmailId: any;
-
+  categoriesData: any[] = [];
   constructor(public popoverController: PopoverController,
     private subscriptionService: subscriptionService,
     private AuthService: AuthService,
+    private categoryService: categoryService, 
     private router: Router
   ) {
   }
@@ -34,6 +35,7 @@ export class Tab3Page {
   billcycle: string = "";
   reminder: string = "";
   note: string = "";
+  category: string = "";
   cancel() {
     this.modal.dismiss(null, 'cancel');
   }
@@ -48,6 +50,7 @@ export class Tab3Page {
       "billingDate": this.billdate,
       "sendReminder": this.reminder,
       "note": this.note,
+      "category":this.category
 
     }
     this.subscriptionService.postNewSubscription(newData).subscribe((data: any) => {
@@ -63,6 +66,7 @@ export class Tab3Page {
     this.AuthService.getLoggedInUserData().then(data => {
       this.userEmailId = data.emailId
     });
+    this.getCategories();
     this.getSubData();
   }
   
@@ -122,6 +126,25 @@ export class Tab3Page {
     (error: any) => {
       console.error(error);
     })
+  }
+
+  getCategories() {
+    this.categoryService.getAllCategoriesData().subscribe(
+      (data: any) => {
+        console.log(data);
+        let newData = [];
+        if (!(data instanceof Array)) {
+          newData.push(data);
+          this.categoriesData = newData;
+        } else {
+          this.categoriesData = data;
+        }
+
+      },
+      (error: any) => {
+        console.error(error);
+      }
+    );
   }
 
 }

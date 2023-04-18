@@ -30,13 +30,11 @@
   
   <ion-item>
     <!-- <ion-label>Report for </ion-label> -->
-    <ion-button size="1%" color="dark" (click)="downloadReport()">
-        <b>Download</b>
-    </ion-button>
+    
     <ion-input
           value="{{ selectedDate | date: 'dd/MM/yyyy' }}"
           id="date"
-          class="ion-text-end"
+          class="ion-text-start"
         ></ion-input>
         <ion-popover trigger="date" size="cover">
           <ng-template>
@@ -47,6 +45,10 @@
             ></ion-datetime>
           </ng-template>
         </ion-popover>
+        <ion-button fill="clear" color="dark" class="btnHeight" (click)="downloadReport()" aria-label="Download Report">
+          <span style="margin-right: 5px;">Report</span>
+          <ion-icon name="download-outline"></ion-icon>
+      </ion-button>
   </ion-item>
   <ion-item>
     <ion-label>Spent/Budget</ion-label>

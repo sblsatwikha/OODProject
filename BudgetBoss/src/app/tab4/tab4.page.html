@@ -47,7 +47,7 @@
 
     </ion-card>
     <ion-list>
-      <ion-item id="open-modal" >
+      <ion-item id="budget-modal" >
         <ion-icon color="primary"  name="settings-outline" slot="start"></ion-icon>
         <ion-label>Preferences</ion-label>
       </ion-item>
@@ -62,7 +62,7 @@
         
     </ion-list>
     
-    <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
+    <ion-modal trigger="budget-modal" (willDismiss)="onWillDismiss($event)">
       <ng-template>
         <ion-header>
           <ion-toolbar>
