@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-// import { Chart } from 'chart.js';
 import Chart from 'chart.js/auto';
 import { ChartConfiguration } from 'chart.js';
 import { NgProgress } from 'ngx-progressbar';
 import { expenseService } from '../services/expenseService.service';
 import { categoryService } from '../services/categoryService.service';
 import { AuthService } from '../services/AuthService.service';
-import { SlicePipe } from '@angular/common';
+import * as XLSX from 'xlsx';
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -18,11 +17,14 @@ export class Tab1Page implements OnInit {
   lineChart!:Chart;
   spend = 0;
   budget=1000;
+  months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   date=new Date();
   expenseData: any[] = [];
   categoriesData: any[] = [];
   userEmailId: any;
   selectedDate=new Date();
+  expensesThisMonth: any;
+  
   constructor(private progress: NgProgress,private expenseService: expenseService,private categoryService: categoryService,private AuthService: AuthService) { }
 
   ngOnInit() {
@@ -38,17 +40,17 @@ export class Tab1Page implements OnInit {
          // DATA FOR DONUT CHART
         
         let expenses=this.expenseData;
-        const currentMonth = new Date(this.selectedDate).getMonth() + 1; // getMonth() returns zero-indexed month, so adding 1 to get the actual month
-        const currentYear = new Date(this.selectedDate).getFullYear();
+        const selectedMonth = new Date(this.selectedDate).getMonth() + 1; // getMonth() returns zero-indexed month, so adding 1 to get the actual month
+        const selectedYear = new Date(this.selectedDate).getFullYear();
 
-        const expensesThisMonth = expenses.filter(expense => {
+        this.expensesThisMonth = expenses.filter(expense => {
           const expenseMonth = new Date(expense.expenseDate).getMonth() + 1;
           const expenseYear = new Date(expense.expenseDate).getFullYear();
-          return expenseMonth === currentMonth && expenseYear === currentYear;
+          return expenseMonth === selectedMonth && expenseYear === selectedYear;
         });
 
-        console.log(expensesThisMonth);
-        expenses=expensesThisMonth;
+        console.log(this.expensesThisMonth);
+        expenses=this.expensesThisMonth;
         let categoryExpenses = expenses.reduce((accumulator, expense) => {
           let category = expense.category;
           let expensePrice = expense.expensePrice;
@@ -259,6 +261,19 @@ export class Tab1Page implements OnInit {
   } 
   onDateChanged(){
     this.getExpenses();
+  }
+
+  downloadReport(){
+    const worksheet = XLSX.utils.json_to_sheet(this.expensesThisMonth);
+    const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = this.months[new Date(this.selectedDate).getMonth() + 1] + new Date(this.selectedDate).getFullYear() + '.xlsx';
+    a.click();
+    window.URL.revokeObjectURL(url);
   }
   
 }

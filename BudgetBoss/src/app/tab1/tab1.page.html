@@ -30,6 +30,9 @@
   
   <ion-item>
     <!-- <ion-label>Report for </ion-label> -->
+    <ion-button size="1%" color="dark" (click)="downloadReport()">
+        <b>Download</b>
+    </ion-button>
     <ion-input
           value="{{ selectedDate | date: 'dd/MM/yyyy' }}"
           id="date"
