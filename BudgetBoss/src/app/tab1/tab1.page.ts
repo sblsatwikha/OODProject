@@ -29,12 +29,14 @@ export class Tab1Page implements OnInit {
   userEmailId: any;
   selectedDate=new Date();
   expensesThisMonth: any;
+  fullName: any;
   
   constructor(private progress: NgProgress,private expenseService: expenseService,private categoryService: categoryService,
     private AuthService: AuthService,private BudgetService: budgetService) { }
 
   ngOnInit() {
     this.AuthService.getLoggedInUserData().then(data => {
+      this.fullName = data.fullName
       this.userEmailId = data.emailId
     });
     this.selectedDate=new Date();
