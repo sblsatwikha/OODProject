@@ -271,7 +271,7 @@ export class Tab1Page implements OnInit {
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = this.months[new Date(this.selectedDate).getMonth() + 1] + new Date(this.selectedDate).getFullYear() + '.xlsx';
+    a.download = this.months[new Date(this.selectedDate).getMonth()] + new Date(this.selectedDate).getFullYear() + '.xlsx';
     a.click();
     window.URL.revokeObjectURL(url);
   }
