@@ -6,6 +6,8 @@ import { expenseService } from '../services/expenseService.service';
 import { categoryService } from '../services/categoryService.service';
 import { AuthService } from '../services/AuthService.service';
 import { Router } from '@angular/router';
+import { NavParams } from '@ionic/angular';
+
 @Component({
   selector: 'app-tab2',
   templateUrl: 'tab2.page.html',
@@ -20,7 +22,7 @@ export class Tab2Page {
     private expenseService: expenseService, 
     private categoryService: categoryService, 
     private AuthService: AuthService,
-    private router: Router){
+    private router: Router,private navParams: NavParams){
   }
 
   ngOnInit() {
@@ -29,6 +31,13 @@ export class Tab2Page {
     });
     this.getExpenses();
     this.getCategories();
+  }
+  ionViewDidEnter() {
+    const shouldCallFunction = this.navParams.get('shouldCallFunction');
+    if (shouldCallFunction) {
+      console.log('Function should be called');
+      this.getExpenses();
+    }
   }
 
   // items = [

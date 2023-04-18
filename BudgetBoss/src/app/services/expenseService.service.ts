@@ -59,7 +59,7 @@ export class expenseService {
       }),
       withCredentials: true
     };
-    return this.http.put(`${this.url}/updateExpense`, httpOptions);
+    return this.http.put(`${this.url}/updateExpense`,expense, httpOptions);
   }
 
   deleteExpense(expense: any){

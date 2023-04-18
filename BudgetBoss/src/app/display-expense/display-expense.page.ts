@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { subscriptionService } from '../services/subscriptionService.service';
 import { expenseService } from '../services/expenseService.service';
+import { categoryService } from '../services/categoryService.service';
 import { AlertController, NavController } from '@ionic/angular';
 
 @Component({
@@ -12,7 +13,12 @@ import { AlertController, NavController } from '@ionic/angular';
 export class DisplayExpensePage implements OnInit {
 
   expenseDetails: any;
+  categoriesData: any;
   expenseKeys: any;
+  cyclesData: any;
+  sendReminderData: any;
+  isInitialized !: boolean;
+
   isSubscription!: boolean;
 
   constructor(private route: ActivatedRoute,
@@ -20,38 +26,80 @@ export class DisplayExpensePage implements OnInit {
     private navCtrl: NavController,
     private subscriptionService: subscriptionService,
     private expensiveService: expenseService,
-    private alertCtrl: AlertController) {
+    private categoryService: categoryService,
+    private alertCtrl: AlertController,
+    private navController: NavController) {
   }
 
   ngOnInit() {
     this.route.queryParams.subscribe(data => {
+      
+      if (!this.isInitialized) {
+        console.log('Page entered for the first time');
+        this.categoriesData = this.getCategories();
+        
+        this.isInitialized = true;
+      } 
+      this.cyclesData=[{
+        "cycleName":"Daily",
+        "value":"daily"
+      },{
+        "cycleName":"Weekly",
+        "value":"weekly"
+      },{
+        "cycleName":"Monthly",
+        "value":"monthly"
+      },{
+        "cycleName":"Yearly",
+        "value":"yearly"
+      }];
       this.expenseDetails = JSON.parse(data['expenseData'])
+     
       this.isSubscription = JSON.parse(data['isSubscription'])
       this.expenseKeys = Object.keys(this.expenseDetails);
+      
+
     })
   }
-
+  getCategories(){
+    this.categoryService.getAllCategoriesData().subscribe(
+      (data: any) => {
+        console.log(data);
+        let newData = [];
+        if (!(data instanceof Array)) {
+          newData.push(data);
+          this.categoriesData=newData;
+        }else {
+          this.categoriesData=data;
+        }
+       
+      },
+      (error: any) => {
+        console.error(error);
+       
+      }
+    );
+  }
   updateDetails(){
     if(this.isSubscription){
       this.subscriptionService.updateSubscription(this.expenseDetails).subscribe(data => {
         console.log(data.message)
-        this.navCtrl.navigateRoot(['/tabs/tab3'])
-      },
-      (error: any) => {
-        console.error(error);
+        this.router.navigate(['/tabs/tab3'])
+          .then(() => {
+            window.location.reload();
+          });      
       })
     } 
     else{
       this.expensiveService.updateExpense(this.expenseDetails).subscribe(data => {
-        console.log(data.message)
+        console.log(data)
         this.router.navigate(['/tabs/tab2'])
-      },
-      (error: any) => {
-        console.error(error);
+        .then(() => {
+          window.location.reload();
+        });
       })
     }
   }
-
   // async showAlert(data: any){
   //   const alert = await this.alertCtrl.create({  
   //     header: data.message,  

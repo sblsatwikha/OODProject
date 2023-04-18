@@ -65,14 +65,11 @@ export class Tab3Page {
     });
     this.getSubData();
   }
-
-  ionViewWillEnter(){
+  
+  ionViewDidEnter(){
     console.log("ionViewWillEnter")
   }
-  ionViewDidEnter(){
-    console.log("ionViewDidEnter")
-    // this.getSubData();
-  }
+  
 
 
   onWillDismiss(event: Event) {
