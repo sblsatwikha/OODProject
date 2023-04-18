@@ -147,6 +147,9 @@ export class Tab2Page {
   deleteExpense(expense: any){
     this.expenseService.deleteExpense(expense).subscribe(data => {
       this.getExpenses();
+    },
+    (error: any) => {
+      console.error(error);
     })
   }
 
