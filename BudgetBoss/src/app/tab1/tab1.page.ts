@@ -5,7 +5,12 @@ import { NgProgress } from 'ngx-progressbar';
 import { expenseService } from '../services/expenseService.service';
 import { categoryService } from '../services/categoryService.service';
 import { AuthService } from '../services/AuthService.service';
+import { budgetService } from '../services/budgetService.service';
 import * as XLSX from 'xlsx';
+export interface BudgetData {
+  budget: number;
+
+}
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -16,7 +21,7 @@ export class Tab1Page implements OnInit {
   doughnutChart!: Chart;
   lineChart!:Chart;
   spend = 0;
-  budget=1000;
+  budget=0;
   months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   date=new Date();
   expenseData: any[] = [];
@@ -25,16 +30,26 @@ export class Tab1Page implements OnInit {
   selectedDate=new Date();
   expensesThisMonth: any;
   
-  constructor(private progress: NgProgress,private expenseService: expenseService,private categoryService: categoryService,private AuthService: AuthService) { }
+  constructor(private progress: NgProgress,private expenseService: expenseService,private categoryService: categoryService,
+    private AuthService: AuthService,private BudgetService: budgetService) { }
 
   ngOnInit() {
     this.AuthService.getLoggedInUserData().then(data => {
       this.userEmailId = data.emailId
     });
     this.selectedDate=new Date();
+    this.getBudget();
     this.getCategories();
     this.getExpenses();
    
+   }
+   getBudget(){
+    this.BudgetService.getBudgetData().subscribe((data2: Object) => {
+      this.budget = (<BudgetData>data2).budget;
+    });
+  }
+  ionViewDidEnter(){
+    this.getBudget();
    }
   prepareData(){
          // DATA FOR DONUT CHART
