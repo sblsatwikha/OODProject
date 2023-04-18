@@ -39,7 +39,7 @@
           </ion-item>
           <ion-item>
             <ion-icon name="logo-usd"></ion-icon>
-            <ion-label class="ion-text-end">1000</ion-label>
+            <ion-label class="ion-text-end">{{ userData.budget }}</ion-label>
           </ion-item>
         
         </ion-list>
@@ -47,11 +47,11 @@
 
     </ion-card>
     <ion-list>
-      <ion-item >
+      <ion-item id="open-modal" >
         <ion-icon color="primary"  name="settings-outline" slot="start"></ion-icon>
         <ion-label>Preferences</ion-label>
       </ion-item>
-      <ion-item (click)="logout()">
+      <ion-item >
         <ion-icon color="secondary"  name="mail-outline" slot="start"></ion-icon>
         <ion-label>Contact Us</ion-label>
       </ion-item>
@@ -62,7 +62,34 @@
         
     </ion-list>
     
-    
+    <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-buttons slot="start">
+              <ion-button (click)="cancel()">Cancel</ion-button>
+            </ion-buttons>
+            <ion-title>Preferences</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+  
+        <ion-content>
+          
+          
+          
+          <ion-item>
+            <ion-label>Budget</ion-label>
+         
+            <ion-input label="Outline input" label-placement="floating"  class="ion-text-end" type="number" fill="outline"
+              placeholder="0.00" [(ngModel)]="userData.budget"></ion-input>
+          </ion-item>
+          
+        </ion-content>
+      </ng-template>
+    </ion-modal>
 </ion-content>
 <ion-footer>
   <ion-toolbar class="ion-text-center">
